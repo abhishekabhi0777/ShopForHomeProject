@@ -1,0 +1,70 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">My Wishlist</h2>
+
+  <div
+    *ngIf="successMessage"
+    class="toast-container position-fixed top-0 end-0 p-3"
+    style="z-index: 2000"
+  >
+    <div class="toast show bg-success text-white border-0">
+      <div class="toast-body">
+        {{ successMessage }}
+      </div>
+    </div>
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="toast-container position-fixed top-0 end-0 p-3"
+    style="z-index: 2000"
+  >
+    <div class="toast show bg-danger text-white border-0">
+      <div class="toast-body">
+        {{ errorMessage }}
+      </div>
+    </div>
+  </div>
+
+  <div *ngIf="wishlistItems.length === 0" class="alert alert-info text-center">
+    Your wishlist is empty.
+  </div>
+
+  <div *ngIf="wishlistItems.length > 0">
+    <div class="card mb-3 shadow-sm" *ngFor="let item of wishlistItems">
+      <div class="row g-0 align-items-center">
+        <div class="col-md-3 text-center p-3">
+          <img
+            [src]="item.imageUrl ? item.imageUrl : 'assets/no-image.png'"
+            class="img-fluid rounded"
+            alt="Product Image"
+            style="max-height: 150px; object-fit: contain"
+          />
+        </div>
+
+        <div class="col-md-6">
+          <div class="card-body">
+            <h5 class="card-title">{{ item.name }}</h5>
+            <p class="card-text">{{ item.description }}</p>
+            <p><b>Category:</b> {{ item.categoryName }}</p>
+            <p><b>Price:</b> ₹{{ item.price }}</p>
+            <p><b>Rating:</b> ⭐ {{ item.rating }}</p>
+          </div>
+        </div>
+
+        <div class="col-md-3 text-center">
+          <button class="btn btn-primary me-2" (click)="moveToCart(item.productId)">
+            Move to Cart
+          </button>
+
+          <button class="btn btn-danger" (click)="removeItem(item.productId)">Remove</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card shadow-sm p-3 mt-4">
+      <div class="mt-2">
+        <button class="btn btn-warning" (click)="clearWishlist()">Clear Wishlist</button>
+      </div>
+    </div>
+  </div>
+</div>
