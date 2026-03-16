@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { FormsModule } from '@angular/forms';
 import { AddProduct } from './add-product';
 
 describe('AddProduct', () => {
@@ -9,11 +9,12 @@ describe('AddProduct', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [AddProduct],
+      imports: [FormsModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(AddProduct);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {

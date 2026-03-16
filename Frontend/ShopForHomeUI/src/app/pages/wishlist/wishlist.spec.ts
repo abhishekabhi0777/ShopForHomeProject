@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { RouterTestingModule } from '@angular/router/testing';
 import { Wishlist } from './wishlist';
 
 describe('Wishlist', () => {
@@ -9,11 +9,12 @@ describe('Wishlist', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
       declarations: [Wishlist],
+      imports: [RouterTestingModule]
     }).compileComponents();
 
     fixture = TestBed.createComponent(Wishlist);
     component = fixture.componentInstance;
-    await fixture.whenStable();
+    fixture.detectChanges();
   });
 
   it('should create', () => {
