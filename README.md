@@ -10,10 +10,11 @@ Database: SQL Server
 Tools: Git, GitHub, Visual Studio, VS Code
 
 ## Project Structure
-Backend/
-Frontend/
-Database Schema
-Use Case Documentation
+Backend_ShopForHome/
+Frontend_ShopForHome/
+Database_Schema_ShopForHome
+ShopForHomeUsecase
+ER_Diagram
 
 ## Features
 User Registration and Login
