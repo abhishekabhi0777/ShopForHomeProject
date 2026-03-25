@@ -9,6 +9,9 @@ import { Cart } from './pages/cart/cart';
 import { Wishlist } from './pages/wishlist/wishlist';
 import { AddProduct } from './pages/add-product/add-product';
 import { UserComponent } from './pages/users/users';
+import { AdminReports } from './pages/admin-reports/admin-reports';
+import { Coupons } from './pages/coupons/coupons';
+import { OrderHistory } from './pages/order-history/order-history';
 
 
 const routes: Routes = [
@@ -20,7 +23,10 @@ const routes: Routes = [
   { path: 'cart', component: Cart },
   { path: 'wishlist', component: Wishlist },
   { path: 'add-product', component: AddProduct },
-  {path:'users', component: UserComponent}
+  {path:'users', component: UserComponent},
+  {path:'admin-reports', component: AdminReports},
+  {path:'coupons', component: Coupons},
+  {path:'order-history', component: OrderHistory},
 ];
 
 @NgModule({

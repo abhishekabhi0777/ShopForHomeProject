@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using ShopForHome.API.Data;
 using ShopForHome.API.DTOs;
@@ -21,7 +22,7 @@ namespace ShopForHome.API.Controllers
             _context = context;
             _jwtService = jwtService;
         }
-
+        [Authorize]
         [HttpGet("users")]
         public async Task<IActionResult> GetUsers()
         {

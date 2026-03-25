@@ -1,7 +1,13 @@
 <div class="container mt-4">
   <h2 class="text-center mb-4">My Cart</h2>
 
-  <div *ngIf="cartItems.length === 0" class="alert alert-info text-center">Your cart is empty.</div>
+  <div *ngIf="successMessage" class="alert alert-success text-center">
+    {{ successMessage }}
+  </div>
+
+  <div *ngIf="cartItems.length === 0" class="alert alert-info text-center">
+    Your cart is empty.
+  </div>
 
   <div *ngIf="cartItems.length > 0">
     <div class="card mb-3 shadow-sm" *ngFor="let item of cartItems">
@@ -21,33 +27,70 @@
             <p class="card-text">{{ item.description }}</p>
             <p><b>Category:</b> {{ item.categoryName }}</p>
             <p><b>Price:</b> ₹{{ item.price }}</p>
+
             <div class="d-flex align-items-center gap-2">
-              <button class="btn btn-sm btn-secondary" (click)="decreaseQuantity(item.productId)">
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="decreaseQuantity(item.productId)"
+              >
                 -
               </button>
 
               <span>{{ item.quantity }}</span>
 
-              <button class="btn btn-sm btn-secondary" (click)="increaseQuantity(item.productId)">
+              <button
+                class="btn btn-sm btn-secondary"
+                (click)="increaseQuantity(item.productId)"
+              >
                 +
               </button>
             </div>
-            <p><b>Subtotal:</b> ₹{{ item.price * item.quantity }}</p>
+
+            <p class="mt-2"><b>Subtotal:</b> ₹{{ item.price * item.quantity }}</p>
           </div>
         </div>
 
         <div class="col-md-3 text-center">
-          <button class="btn btn-danger" (click)="removeItem(item.productId)">Remove</button>
+          <button class="btn btn-danger" (click)="removeItem(item.productId)">
+            Remove
+          </button>
         </div>
       </div>
     </div>
 
-    <div class="card shadow-sm p-3 mt-4">
-      <h4>Total Amount: ₹{{ totalAmount }}</h4>
+    <div class="card mt-4 shadow-sm">
+      <div class="card-body">
+        <h4>Apply Coupon</h4>
 
-      <div class="mt-3">
-        <button class="btn btn-warning me-2" (click)="clearCart()">Clear Cart</button>
-        <button class="btn btn-success">Checkout</button>
+        <div class="mb-3">
+          <label class="form-label">Select Coupon</label>
+          <select
+            class="form-control"
+            [(ngModel)]="selectedCouponId"
+            (change)="onCouponChange()"
+          >
+            <option [ngValue]="null">No Coupon</option>
+            <option
+              *ngFor="let coupon of userCoupons"
+              [ngValue]="coupon.couponId"
+            >
+              {{ coupon.couponCode }} - {{ coupon.discountPercent }}% off (Min ₹{{ coupon.minimumAmount }})
+            </option>
+          </select>
+        </div>
+
+        <p><b>Total Amount:</b> ₹{{ totalAmount }}</p>
+        <p><b>Discount Amount:</b> ₹{{ discountAmount }}</p>
+        <p><b>Final Amount:</b> ₹{{ finalAmount }}</p>
+
+        <div class="d-flex gap-2">
+          <button class="btn btn-success" (click)="placeOrder()">
+            Place Order
+          </button>
+          <button class="btn btn-warning" (click)="clearCart()">
+            Clear Cart
+          </button>
+        </div>
       </div>
     </div>
   </div>

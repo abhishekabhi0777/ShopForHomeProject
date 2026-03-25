@@ -106,7 +106,7 @@ namespace ShopForHome.API.Data
                 .HasForeignKey(uc => uc.CouponId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            // DECIMAL PRECISION FIXES
+            // DECIMAL PRECISION 
 
             modelBuilder.Entity<Product>()
                 .Property(p => p.Price)

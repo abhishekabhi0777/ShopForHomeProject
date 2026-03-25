@@ -2,7 +2,83 @@
   <div class="d-flex justify-content-between align-items-center mb-4">
     <h2>Our Products</h2>
 
-    <button *ngIf="isAdmin()" class="btn btn-success" routerLink="/add-product">Add Product</button>
+    <div *ngIf="isAdmin()" class="d-flex gap-2">
+      <button class="btn btn-success" routerLink="/add-product">Add Product</button>
+    </div>
+  </div>
+
+  <!-- Search -->
+  <div class="row mb-3">
+    <div class="col-md-8">
+      <input
+        type="text"
+        class="form-control"
+        placeholder="Search by product name, description, or category"
+        [(ngModel)]="keyword"
+      />
+    </div>
+    <div class="col-md-4">
+      <button class="btn btn-primary w-100" (click)="searchProducts()">Search</button>
+    </div>
+  </div>
+
+  <!-- Filters -->
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <select class="form-control" [(ngModel)]="selectedCategoryId">
+        <option [ngValue]="null">All Categories</option>
+        <option *ngFor="let category of categories" [ngValue]="category.categoryId">
+          {{ category.name }}
+        </option>
+      </select>
+    </div>
+
+    <div class="col-md-2">
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Min Price"
+        [(ngModel)]="minPrice"
+      />
+    </div>
+
+    <div class="col-md-2">
+      <input
+        type="number"
+        class="form-control"
+        placeholder="Max Price"
+        [(ngModel)]="maxPrice"
+      />
+    </div>
+
+    <div class="col-md-2">
+      <input
+        type="number"
+        step="0.1"
+        class="form-control"
+        placeholder="Min Rating"
+        [(ngModel)]="minRating"
+      />
+    </div>
+
+    <div class="col-md-1">
+      <button class="btn btn-info w-100" (click)="applyFilters()">Filter</button>
+    </div>
+
+    <div class="col-md-2">
+      <button class="btn btn-secondary w-100" (click)="resetFilters()">Reset</button>
+    </div>
+  </div>
+
+  <!-- CSV Upload -->
+  <div *ngIf="isAdmin()" class="mb-3">
+    <input
+      type="file"
+      accept=".csv"
+      (change)="onCsvFileSelected($event)"
+      class="form-control mb-2"
+    />
+    <button class="btn btn-primary" (click)="uploadCsv()">Upload CSV</button>
   </div>
 
   <!-- Toast Success -->
@@ -50,10 +126,16 @@
           <p>{{ product.description }}</p>
           <p><b>Category:</b> {{ product.categoryName }}</p>
           <p><b>Price:</b> ₹{{ product.price }}</p>
+          <p><b>Stock:</b> {{ product.stock }}</p>
+<p *ngIf="product.stock <= 10" class="text-danger fw-bold">
+  Low Stock
+</p>
           <p><b>Rating:</b> ⭐ {{ product.rating }}</p>
 
           <div *ngIf="!isAdmin(); else adminButtons">
-            <button class="btn btn-primary me-2" (click)="addToCart(product)">Add To Cart</button>
+            <button class="btn btn-primary me-2" (click)="addToCart(product)">
+              Add To Cart
+            </button>
 
             <button
               class="btn"
@@ -65,7 +147,9 @@
           </div>
 
           <ng-template #adminButtons>
-            <button class="btn btn-warning me-2" (click)="editProduct(product)">Edit</button>
+            <button class="btn btn-warning me-2" (click)="editProduct(product)">
+              Edit
+            </button>
 
             <button class="btn btn-danger" (click)="deleteProduct(product.productId)">
               Delete

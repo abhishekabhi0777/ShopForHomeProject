@@ -16,7 +16,9 @@ import { Wishlist } from './pages/wishlist/wishlist';
 import { HttpClientModule } from '@angular/common/http';
 import { AddProduct } from './pages/add-product/add-product';
 import { UserComponent } from './pages/users/users';
-
+import { AdminReports } from './pages/admin-reports/admin-reports';
+import { Coupons } from './pages/coupons/coupons';
+import { OrderHistory } from './pages/order-history/order-history';
 
 @NgModule({
   declarations: [
@@ -31,6 +33,9 @@ import { UserComponent } from './pages/users/users';
     Wishlist,
     AddProduct,
     UserComponent,
+    AdminReports,
+    Coupons,
+    OrderHistory,
   ],
   imports: [BrowserModule, AppRoutingModule, FormsModule, HttpClientModule],
   providers: [],

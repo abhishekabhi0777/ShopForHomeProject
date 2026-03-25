@@ -1,0 +1,131 @@
+<div class="container mt-4" *ngIf="isAdmin(); else noAccess">
+  <h2 class="mb-4">Admin Reports Dashboard</h2>
+
+  <div class="row mb-4">
+    <div class="col-md-3">
+      <label class="form-label">From Date</label>
+      <input type="date" class="form-control" [(ngModel)]="fromDate" />
+    </div>
+
+    <div class="col-md-3">
+      <label class="form-label">To Date</label>
+      <input type="date" class="form-control" [(ngModel)]="toDate" />
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+      <button class="btn btn-primary w-100" (click)="applyDateFilter()">Apply</button>
+    </div>
+
+    <div class="col-md-2 d-flex align-items-end">
+      <button class="btn btn-secondary w-100" (click)="resetFilter()">Reset</button>
+    </div>
+  </div>
+
+  <div *ngIf="salesData" class="row mb-4">
+    <div class="col-md-4">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5>Total Orders</h5>
+          <h3>{{ salesData.totalOrders }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5>Total Revenue</h5>
+          <h3>₹{{ salesData.totalRevenue }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-4">
+      <div class="card text-center shadow-sm">
+        <div class="card-body">
+          <h5>Total Discount</h5>
+          <h3>₹{{ salesData.totalDiscount }}</h3>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mb-4 shadow-sm">
+    <div class="card-body">
+      <h4>Sales Orders</h4>
+
+      <div *ngIf="salesData?.orders?.length; else noOrders">
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>Order Id</th>
+              <th>User Id</th>
+              <th>Order Date</th>
+              <th>Total Amount</th>
+              <th>Discount</th>
+              <th>Final Amount</th>
+              <th>Status</th>
+              <th>Total Items</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let order of salesData.orders">
+              <td>{{ order.orderId }}</td>
+              <td>{{ order.userId }}</td>
+              <td>{{ order.orderDate | date:'short' }}</td>
+              <td>₹{{ order.totalAmount }}</td>
+              <td>₹{{ order.discountAmount }}</td>
+              <td>₹{{ order.finalAmount }}</td>
+              <td>{{ order.status }}</td>
+              <td>{{ order.totalItems }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noOrders>
+        <p class="text-muted mt-3">No sales data available.</p>
+      </ng-template>
+    </div>
+  </div>
+
+  <div class="card shadow-sm">
+    <div class="card-body">
+      <h4>Low Stock Products</h4>
+
+      <div *ngIf="lowStockProducts.length > 0; else noLowStock">
+        <table class="table table-bordered mt-3">
+          <thead>
+            <tr>
+              <th>Product Id</th>
+              <th>Name</th>
+              <th>Stock</th>
+              <th>Price</th>
+              <th>Category Id</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let product of lowStockProducts">
+              <td>{{ product.productId }}</td>
+              <td>{{ product.name }}</td>
+              <td class="text-danger fw-bold">{{ product.stock }}</td>
+              <td>₹{{ product.price }}</td>
+              <td>{{ product.categoryId }}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <ng-template #noLowStock>
+        <p class="text-muted mt-3">No low stock products.</p>
+      </ng-template>
+    </div>
+  </div>
+</div>
+
+<ng-template #noAccess>
+  <div class="container mt-4">
+    <h3 class="text-danger">Access Denied</h3>
+    <p>Only admin can view reports.</p>
+  </div>
+</ng-template>

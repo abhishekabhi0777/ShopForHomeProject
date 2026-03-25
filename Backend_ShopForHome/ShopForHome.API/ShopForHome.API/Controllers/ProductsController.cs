@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShopForHome.API.Data;
 using ShopForHome.API.Models;
+using System.Globalization;
 
 namespace ShopForHome.API.Controllers
 {
@@ -189,6 +190,91 @@ namespace ShopForHome.API.Controllers
             await _context.SaveChangesAsync();
 
             return Ok(new { message = "Product deleted successfully" });
+        }
+
+        [HttpPost("upload-csv")]
+        public async Task<IActionResult> UploadProductsCsv(IFormFile file)
+        {
+            if (file == null || file.Length == 0)
+                return BadRequest(new { message = "CSV file is required" });
+
+            var productsToAdd = new List<Product>();
+            var errors = new List<string>();
+
+            using var stream = new StreamReader(file.OpenReadStream());
+            string? headerLine = await stream.ReadLineAsync();
+
+            if (string.IsNullOrWhiteSpace(headerLine))
+                return BadRequest(new { message = "CSV file is empty" });
+
+            int rowNumber = 1;
+
+            while (!stream.EndOfStream)
+            {
+                rowNumber++;
+                var line = await stream.ReadLineAsync();
+
+                if (string.IsNullOrWhiteSpace(line))
+                    continue;
+
+                var values = line.Split(',');
+
+                if (values.Length < 7)
+                {
+                    errors.Add($"Row {rowNumber}: Invalid column count");
+                    continue;
+                }
+
+                try
+                {
+                    var name = values[0].Trim();
+                    var description = values[1].Trim();
+                    var price = decimal.Parse(values[2].Trim(), CultureInfo.InvariantCulture);
+                    var rating = decimal.Parse(values[3].Trim(), CultureInfo.InvariantCulture);
+                    var stock = int.Parse(values[4].Trim());
+                    var imageUrl = values[5].Trim();
+                    var categoryId = int.Parse(values[6].Trim());
+
+                    var categoryExists = await _context.Categories
+                        .AnyAsync(c => c.CategoryId == categoryId);
+
+                    if (!categoryExists)
+                    {
+                        errors.Add($"Row {rowNumber}: Invalid CategoryId {categoryId}");
+                        continue;
+                    }
+
+                    productsToAdd.Add(new Product
+                    {
+                        Name = name,
+                        Description = description,
+                        Price = price,
+                        Rating = rating,
+                        Stock = stock,
+                        ImageUrl = imageUrl,
+                        CategoryId = categoryId,
+                        CreatedAt = DateTime.Now
+                    });
+                }
+                catch
+                {
+                    errors.Add($"Row {rowNumber}: Invalid data format");
+                }
+            }
+
+            if (productsToAdd.Count > 0)
+            {
+                _context.Products.AddRange(productsToAdd);
+                await _context.SaveChangesAsync();
+            }
+
+            return Ok(new
+            {
+                message = "CSV upload completed",
+                insertedCount = productsToAdd.Count,
+                errorCount = errors.Count,
+                errors
+            });
         }
     }
 }

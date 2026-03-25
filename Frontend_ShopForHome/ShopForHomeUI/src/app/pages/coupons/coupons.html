@@ -1,0 +1,123 @@
+<div class="container mt-4">
+  <h2 class="mb-4">Coupons</h2>
+
+  <div *ngIf="message" class="alert alert-success">
+    {{ message }}
+  </div>
+
+  <div *ngIf="error" class="alert alert-danger">
+    {{ error }}
+  </div>
+
+  <div *ngIf="isAdmin()" class="row">
+    <div class="col-md-6">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4>Create Coupon</h4>
+
+          <div class="mb-3">
+            <label>Code</label>
+            <input type="text" class="form-control" [(ngModel)]="couponForm.code" />
+          </div>
+
+          <div class="mb-3">
+            <label>Discount Percent</label>
+            <input type="number" class="form-control" [(ngModel)]="couponForm.discountPercent" />
+          </div>
+
+          <div class="mb-3">
+            <label>Expiry Date</label>
+            <input type="date" class="form-control" [(ngModel)]="couponForm.expiryDate" />
+          </div>
+
+          <div class="mb-3">
+            <label>Minimum Amount</label>
+            <input type="number" class="form-control" [(ngModel)]="couponForm.minimumAmount" />
+          </div>
+
+          <button class="btn btn-primary" (click)="createCoupon()">Create Coupon</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-6">
+      <div class="card shadow-sm mb-4">
+        <div class="card-body">
+          <h4>Assign Coupon to User</h4>
+
+          <div class="mb-3">
+            <label>User Id</label>
+            <input type="number" class="form-control" [(ngModel)]="assignForm.userId" />
+          </div>
+
+          <div class="mb-3">
+            <label>Coupon Id</label>
+            <input type="number" class="form-control" [(ngModel)]="assignForm.couponId" />
+          </div>
+
+          <button class="btn btn-success" (click)="assignCoupon()">Assign Coupon</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card shadow-sm mb-4">
+    <div class="card-body">
+      <h4>All Coupons</h4>
+
+      <table class="table table-bordered mt-3" *ngIf="coupons.length > 0">
+        <thead>
+          <tr>
+            <th>Coupon Id</th>
+            <th>Code</th>
+            <th>Discount %</th>
+            <th>Expiry Date</th>
+            <th>Minimum Amount</th>
+            <th>Active</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let coupon of coupons">
+            <td>{{ coupon.couponId }}</td>
+            <td>{{ coupon.code }}</td>
+            <td>{{ coupon.discountPercent }}</td>
+            <td>{{ coupon.expiryDate | date:'shortDate' }}</td>
+            <td>₹{{ coupon.minimumAmount }}</td>
+            <td>{{ coupon.isActive ? 'Yes' : 'No' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="coupons.length === 0" class="text-muted">No coupons found.</p>
+    </div>
+  </div>
+
+  <div class="card shadow-sm" *ngIf="!isAdmin()">
+    <div class="card-body">
+      <h4>My Coupons</h4>
+
+      <table class="table table-bordered mt-3" *ngIf="userCoupons.length > 0">
+        <thead>
+          <tr>
+            <th>Coupon Code</th>
+            <th>Discount %</th>
+            <th>Expiry Date</th>
+            <th>Minimum Amount</th>
+            <th>Used</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let coupon of userCoupons">
+            <td>{{ coupon.couponCode }}</td>
+            <td>{{ coupon.discountPercent }}</td>
+            <td>{{ coupon.expiryDate | date:'shortDate' }}</td>
+            <td>₹{{ coupon.minimumAmount }}</td>
+            <td>{{ coupon.isUsed ? 'Yes' : 'No' }}</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p *ngIf="userCoupons.length === 0" class="text-muted">No coupons assigned.</p>
+    </div>
+  </div>
+</div>

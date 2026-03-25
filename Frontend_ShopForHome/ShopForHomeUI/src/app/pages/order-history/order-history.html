@@ -1,0 +1,62 @@
+<div class="container mt-4">
+  <h2 class="text-center mb-4">My Orders</h2>
+
+  <div *ngIf="isLoading" class="text-center">
+    <p>Loading orders...</p>
+  </div>
+
+  <div *ngIf="!isLoading && errorMessage" class="alert alert-danger text-center">
+    {{ errorMessage }}
+  </div>
+
+  <div *ngIf="!isLoading && !errorMessage && orders.length === 0" class="alert alert-info text-center">
+    No orders placed yet.
+  </div>
+
+  <div *ngIf="!isLoading && orders.length > 0">
+    <div class="card mb-4 shadow-sm" *ngFor="let order of orders">
+      <div class="card-body">
+        <h5 class="mb-3">Order #{{ order.orderId }}</h5>
+
+        <p><b>Order Date:</b> {{ order.orderDate | date:'medium' }}</p>
+        <p><b>Total Amount:</b> ₹{{ order.totalAmount }}</p>
+        <p><b>Discount:</b> ₹{{ order.discountAmount }}</p>
+        <p><b>Final Amount:</b> ₹{{ order.finalAmount }}</p>
+        <p><b>Status:</b> {{ order.status }}</p>
+
+        <hr>
+
+        <h6 class="mb-3">Items in this order</h6>
+
+        <div *ngIf="order.items?.length > 0">
+          <div class="row align-items-center border rounded p-2 mb-3" *ngFor="let item of order.items">
+            <div class="col-md-2 text-center">
+              <img
+                [src]="item.imageUrl ? item.imageUrl : 'assets/no-image.png'"
+                alt="Product Image"
+                class="img-fluid rounded"
+                style="max-height: 80px; object-fit: contain;"
+              />
+            </div>
+
+            <div class="col-md-5">
+              <h6 class="mb-1">{{ item.productName }}</h6>
+            </div>
+
+            <div class="col-md-2">
+              <b>Qty:</b> {{ item.quantity }}
+            </div>
+
+            <div class="col-md-3">
+              <b>Price:</b> ₹{{ item.price }}
+            </div>
+          </div>
+        </div>
+
+        <div *ngIf="!order.items || order.items.length === 0" class="text-muted">
+          No items found for this order.
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

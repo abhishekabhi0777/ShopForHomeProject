@@ -32,10 +32,20 @@
             Wishlist <span *ngIf="wishlistCount > 0">({{ wishlistCount }})</span>
           </a>
         </li>
+        <li class="nav-item" *ngIf="role === 'User'">
+  <a class="nav-link" routerLink="/order-history">My Orders</a>
+</li>
+        <li class="nav-item">
+  <a class="nav-link" routerLink="/coupons">Coupons</a>
+</li>
 
         <li class="nav-item" *ngIf="role === 'Admin'">
-          <a class="nav-link" routerLink="/users">Users</a>
-        </li>
+  <a class="nav-link" routerLink="/users">Users</a>
+</li>
+
+<li class="nav-item" *ngIf="role === 'Admin'">
+  <a class="nav-link" routerLink="/admin-reports">Reports</a>
+</li>
       </ul>
 
       <ul class="navbar-nav">

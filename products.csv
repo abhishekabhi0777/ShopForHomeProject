@@ -1,0 +1,4 @@
+﻿Name,Description,Price,Rating,Stock,ImageUrl,CategoryId
+Wooden Chair,Comfortable chair,1999,4.5,20,assets/images/chair.jpg,1
+Modern Lamp,Stylish lamp,999,4.2,15,assets/images/lamp.jpg,3
+Office Table,Wooden office table,4999,4.7,10,assets/images/table.jpg,3
